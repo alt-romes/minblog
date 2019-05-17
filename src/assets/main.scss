@@ -1,0 +1,23 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto+Slab);
+
+$family-primary: 'Roboto Slab', serif;
+
+$table-cell-border: 1px solid #fff;
+$table-cell-padding: 1em 0.75em;
+
+@import 'bulma';
+
+
+.router-link {
+    text-decoration: none;
+    color: inherit !important;
+}
+
+.router-link-active {
+    color: inherit !important; 
+}
+
+.main-container {
+    max-width: 38rem;
+    margin: auto;
+}
