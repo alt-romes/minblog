@@ -8,11 +8,11 @@ self.__precacheManifest = [
     "url": "/minblog/js/about.ca69b279.js"
   },
   {
-    "revision": "b0ba3e9ebf1bf10f6a15",
-    "url": "/minblog/css/app.d9d62973.css"
+    "revision": "af8b8e7c1ec756461357",
+    "url": "/minblog/css/app.a61fa422.css"
   },
   {
-    "revision": "b0ba3e9ebf1bf10f6a15",
+    "revision": "af8b8e7c1ec756461357",
     "url": "/minblog/js/app.723b1963.js"
   },
   {
@@ -44,7 +44,7 @@ self.__precacheManifest = [
     "url": "/minblog/js/chunk-vendors.6aa12b5f.js"
   },
   {
-    "revision": "ad859aa53369d8f8dcb6982c52e88d05",
+    "revision": "4a7c0b9611a413847bcd07fe04b3a2ca",
     "url": "/minblog/index.html"
   },
   {
