@@ -23,7 +23,7 @@
                     </div>
                 </div>
                 <div class="field">
-                    <label class="label">content</label>
+                    <label class="label">content <span class="has-text-info">(markdown supported)</span></label>
                     <div class="control">
                         <textarea v-model="post.content" class="textarea" rows="10" placeholder="write away..."></textarea>
                     </div>
