@@ -2,7 +2,13 @@
     <div>
         <section class="section">
             <div class="container">
-                <router-link to="/"><span class="icon" style="padding: 2rem"><i class="fas fa-arrow-left"></i></span></router-link>
+                <div class="level is-mobile">
+                    <div class="level-left">
+                        <div class="level-item">
+                            <router-link to="/"><span class="icon"><i class="fas fa-arrow-left"></i></span></router-link>
+                        </div>
+                    </div>
+                </div> 
             </div>
         </section>
         <section class="hero is-large">

@@ -13,6 +13,9 @@
             <div class="level-item">
               <router-link to="/about"><p class="title is-size-5"><span class="icon"><i class="far fa-address-card"></i></span></p></router-link>
             </div>
+            <div class="level-item">
+              <label class="label">{{blogTitle}}</label>
+            </div>
             <!-- <div class="level-item">
               <p class="title is-size-5"><span class="icon"><i class="far fa-envelope"></i></span></p>
             </div> -->
@@ -52,35 +55,42 @@ export default {
       return {
           posts: [],
           loading: true,
-          showContent: true
+          showContent: true,
+          blogTitle: 'loading...'
       }
     },
     created: function () {
+        firebase.database().ref("settings/blogTitle").once('value', (s) => {
+          if(s.val()) {
+            this.blogTitle = s.val()
+          }
+        });
         firebase.database().ref('posts/').on('value', (s)=>{
             this.posts = [];
             var values = s.val()
             for(var key in values) {
                 this.posts.push(values[key]);
             }
+            this.posts.reverse();
             //sort array, latest first, and then display the first child
             if(this.posts.length<=0) {
                 console.log("Handle error for no match of posts here");
             }
             this.loading=false;
-            this.posts = [
-              {
-                id:1,
-                content: "this is a test dummy content lorem impsum i don't know enough latin to write that",
-                date: "19 May 2019",
-                title: "Gern geschehen"
-              },
-              {
-                id:2,
-                content: "this is a test dummy content lorem impsum i don't know enough latin to write that",
-                date: "19 May 2019",
-                title: "Wasser bitte"
-              }
-            ]
+            // this.posts = [
+            //   {
+            //     id:1,
+            //     content: "this is a test dummy content lorem impsum i don't know enough latin to write that",
+            //     date: "19 May 2019",
+            //     title: "Gern geschehen"
+            //   },
+            //   {
+            //     id:2,
+            //     content: "this is a test dummy content lorem impsum i don't know enough latin to write that",
+            //     date: "19 May 2019",
+            //     title: "Wasser bitte"
+            //   }
+            // ]
         });
     }
 }

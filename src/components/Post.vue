@@ -18,9 +18,7 @@
             </div>
         </div>
         <div v-if="showContent || showPost" class="post-content">
-            <div class="content">
-                <p>{{post.content}}</p>
-            </div>
+            <div class="content" v-html="content"></div>
         </div>
     </div>
 </template>
@@ -45,10 +43,17 @@
 </style>
 
 <script>
+import marked from 'marked'
+
 export default {
     data() {
         return {
             showPost: false
+        }
+    },
+    computed: {
+        content: function () {
+            return marked(this.post.content, {breaks: true})
         }
     },
     props: {

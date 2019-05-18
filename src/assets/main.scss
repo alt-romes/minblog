@@ -21,3 +21,10 @@ $table-cell-padding: 1em 0.75em;
     max-width: 38rem;
     margin: auto;
 }
+
+.content img {
+    display: block;
+    margin: auto;
+    border-radius: 1px;
+    // box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.05);
+}

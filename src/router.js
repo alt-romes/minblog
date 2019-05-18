@@ -35,7 +35,31 @@ const router = new Router({
       meta: {
         requiresAuth: true
       }
-    }
+    },
+    {
+      path: '/edit',
+      name: 'edit',
+      component: () => import('./views/Edit.vue'),
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/edit/:id',
+      name: 'edit post',
+      component: () => import('./views/Edit.vue'),
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: () => import('./views/Settings.vue'),
+      meta: {
+        requiresAuth: true
+      }
+    },
   ]
 })
 
