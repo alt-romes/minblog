@@ -1,7 +1,9 @@
 # minblog
-a minimal designed blog platform, and a complete beginners guide on how to set it up and host it in github pages, so you can have a personal blog with little effort.
+a **minimal designed blog platform**, and a *complete beginners guide* on how to set it up and host it in github pages, so you can have a personal blog with little effort.
 the live demo:
 https://alt-romes.github.io/minblog
+github:
+https://github.com/alt-romes/minblog
 
 ## 1 - Getting started
 
@@ -90,6 +92,7 @@ git commit -m "blog ready"
 git push -f <link you copied> master
 
 **Example**
+```
 *git push -f https://github.com/alt-romes/example-blog.git master*
 ```
 
