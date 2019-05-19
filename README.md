@@ -98,6 +98,6 @@ git push -f <link you copied> master
 4. Refresh the repository's page, and click Settings
 ![settings](https://i.imgur.com/vo0pD1X.png)
 
-5. Scroll down and click in the GitHub Pages section, *Source*, and choose **master branch /docs folder**
+5. Scroll down and click in the GitHub Pages section, *Source*, and choose **master branch /docs folder**, you need to have a PRO account but if you're a student, you can get it for [free](https://education.github.com/pack)
 
 ### You're done!
