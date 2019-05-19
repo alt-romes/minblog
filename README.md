@@ -88,6 +88,7 @@ git init
 git add .
 git commit -m "blog ready"
 git push -f <link you copied> master
+```
 
 **Example**
 ```
