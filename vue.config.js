@@ -1,6 +1,5 @@
 module.exports = {
-    publicPath: '/minblog',
-    outputDir: 'docs',
+    outputDir: 'example-blog.github.io',
     devServer: {
       disableHostCheck: true
     },
