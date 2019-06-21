@@ -7,7 +7,7 @@ https://alt-romes.github.io/minblog
 
 1. Cloning / downloading the repository (on the command line)
 ```
-git clone https://github.com/alt-romes/minblog.git
+git clone https://github.com/alt-romes/minblog.git minblog-master
 ```
 
 2. Installing all dependencies. (First change to the right directory) (on the command line)
@@ -60,8 +60,8 @@ Now we gotta make sure the blog is linked to the project you just configured.
 
 ### 4 - Configuring
 
-1. In the project folder, open *vue.config.js*, and change the *publicPath* to the name you are going to use up ahead for the github configuration.
-![publicPath](https://i.imgur.com/uXS42Vp.png)
+1. In the project folder, open *vue.config.js*, and change the *outputDir* to the username of you github account followed by **.github.io**, or, if you don't have an account, the name you are going to use to sign up, which you should check if is available first. You are going to use this name **example-blog.github.io** ahead for the github configuration.
+![outputdir](https://i.imgur.com/iUxwIg5.png)
 
 2. (Optional) For further web title costumization, you can open inside **public** folder, the file **index.html**, and change the text between the **<title></title>** tags, and open, in the same folder, the file **manifest.json** and change,  both the name and the short_name, to whatever.
 
@@ -74,16 +74,15 @@ npm run build
 
 ### 5 - Publishing
 
-1. Login to [Github](https://github.com/login), and, create a new repository, with the same name you used in the *vue.config.js*'s publicPath.
-![new repo](https://i.imgur.com/a3nBzrI.png)
-
-![finish creation](https://i.imgur.com/mrbNagH.png)
+1. Login to [Github](https://github.com/login), and, create a new repository, with the same name you used in the *vue.config.js*'s outputDir.
+![new repo](https://i.imgur.com/fKuoOOm.png)
 
 2. Copy the repository's https link
-![copy link](https://i.imgur.com/vwfgoeJ.png)
+![copy link](https://i.imgur.com/HoYznQA.png)
 
 3. Go to the directory on the command line again and run the commands.
 ```
+cd <name you used on the outputDir>
 git init
 git add .
 git commit -m "blog ready"
@@ -92,12 +91,10 @@ git push -f <link you copied> master
 
 **Example**
 ```
-git push -f https://github.com/alt-romes/example-blog.git master
+cd example-blog.github.io
+git push -f https://github.com/alt-romes/example-blog.github.io.git master
 ```
 
-4. Refresh the repository's page, and click Settings
-![settings](https://i.imgur.com/vo0pD1X.png)
-
-5. Scroll down and click in the GitHub Pages section, *Source*, and choose **master branch /docs folder**,  you need to have a PRO account but if you're a student, you can get it for free
+4. It should be done! In about 10 minutes it should be working if you navigate to the website with the name you used in the output dir, for example *https://example-blog.github.io*
 
 ### You're done!
