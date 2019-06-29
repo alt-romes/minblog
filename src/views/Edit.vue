@@ -13,7 +13,10 @@
     </section>
     <section class="section">
         <div class="main-container">
-            <div>
+            <div v-if="loading" class="has-text-centered">
+                <span class="icon"><i class="fas fa-circle-notch fa-spin"></i></span>
+            </div>
+            <div v-else>
                 <label class="label has-text-danger">it's recommended to write elsewhere and paste it here. if you leave, the progress will not be saved</label>
                 <label class="label has-text-success">after sent, you are able to edit it</label>
                 <div class="field">
@@ -50,45 +53,36 @@
 <script>
 import firebase from 'firebase/app'
 import 'firebase/database'
+import app from '../App.vue'
 
 export default {
     data() {
         return {
             months: ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"],
-            post: {}
+            post: {},
+            loading: true
         }
     },
-    created: function () {
+    created: async function () {
         if(this.$route.params.id) {
-            firebase.database().ref("posts/"+this.$route.params.id).once('value', (s) => {
-                this.post = s.val()
-            })
+            var data = await app.methods.getData()
+            this.post = data.posts[this.$route.params.id]
         }
+        this.loading = false
     },
     methods: {
-        submitPost: function () {
-            if(this.$route.params.id) {
-                if(this.post.title.trim()!="" && this.post.content.trim()!="") {
-                    firebase.database().ref("posts/" + this.$route.params.id).set(this.post).then(() => {
-                        this.$router.replace("/dashboard");
-                    })
+        submitPost: async function () {
+            if(this.post.title.trim()!="" && this.post.content.trim()!="") {
+                if(this.$route.params.id) {
+                    await app.methods.editPost(this.$route.params.id, this.post)
+                    this.$router.replace("/dashboard");
                 } else {
-                    console.log("empty")
-                }
-            } else {
-                if(this.post.title.trim()!="" && this.post.content.trim()!="") {
                     var dt = new Date();
                     this.post.date = dt.getDate() + " " + this.months[dt.getMonth()] + " " + dt.getFullYear();
-                    var uidRef = firebase.database().ref("posts/").push();
-                    var uid = uidRef.key;
-                    this.post.id=uid;
-                    uidRef.set(this.post).then(() => {
-                        this.$router.replace("/dashboard");
-                    })
-                } else {
-                    console.log("empty")
+                    await app.methods.newPost(this.post)
+                    this.$router.replace("/dashboard");
                 }
-            }
+            } else console.log("no content")
         }
     }
 }

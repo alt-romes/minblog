@@ -13,7 +13,10 @@
     </section>
     <section class="section">
         <div class="main-container">
-            <div>
+            <div v-if="loading" class="has-text-centered">
+                <span class="icon"><i class="fas fa-circle-notch fa-spin"></i></span>
+            </div>
+            <div v-else>
                 <div class="field">
                     <label class="label">blog title (appears on the top of the homepage)</label>
                     <div class="control">
@@ -66,6 +69,7 @@
 <script>
 import firebase from 'firebase/app'
 import 'firebase/database'
+import app from '../App.vue'
 
 export default {
     data() {
@@ -73,23 +77,20 @@ export default {
             settings: {
 
             },
-            isLoading: true
+            loading: true
         }
     },
-    created: function () {
-        firebase.database().ref("settings/").on('value', (s) => {
-            if(s.val()) {
-                this.settings = s.val();
-            }
-            this.isLoading=false;
-        })
+    created: async function () {
+        var data = await app.methods.getData()
+        this.settings = data.settings
+        console.log(this.settings)
+        this.loading=false;
     },
     methods: {
-        saveSettings: function () {
+        saveSettings: async function () {
             if(!this.isLoading) {
-                firebase.database().ref("settings/").set(this.settings).then(() => {
-                    alert("saved.")
-                })
+                await app.methods.changeSettings(this.settings)
+                alert("saved.")
             }
         }
     }

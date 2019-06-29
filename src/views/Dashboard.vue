@@ -7,6 +7,11 @@
                         <router-link to="/"><span class="icon"><i class="fas fa-arrow-left"></i></span></router-link>
                     </div>
                 </div>
+                <div class="level-right">
+                    <div class="level-item">
+                        <a @click="logout()"><span class="icon"><i class="fas fa-door-open"></i></span></a>
+                    </div>
+                </div>
             </div> 
         </div>
         <div class="main-container">
@@ -29,7 +34,10 @@
             </section>
             <section class="section">
                 <!-- <p class="label"></p> -->
-                <table class="table is-fullwidth is-hoverable">
+                <div v-if="loading" class="has-text-centered">
+                    <span class="icon"><i class="fas fa-circle-notch fa-spin"></i></span>
+                </div>
+                <table v-else class="table is-fullwidth is-hoverable">
                     <tbody>
                         <tr v-for="post in posts" :key="post.id">
                             <th>{{post.title}}</th>
@@ -56,51 +64,39 @@
 <script>
 import firebase from 'firebase/app'
 import 'firebase/database'
-
+import app from '../App.vue'
 export default {
     data () {
         return {
             posts: null,
             showAddNew: false,
-            showSettings: false
+            showSettings: false,
+            loading: true
         }
     },
     methods: {
         confirmDelete: function (id) {
             var confirm = window.confirm("Do you really want to delete this post?");
             if(confirm) {
-                firebase.database().ref('posts/' + id).remove();
+                app.methods.deletePost(id)
             }
         }
+        // logout: function () {
+        //     firebase.auth().signOut()
+        // }
     },
-    created: function () {
-        firebase.database().ref('posts/').on('value', (s)=>{
-            this.posts = [];
-            var values = s.val()
-            for(var key in values) {
-                this.posts.push(values[key]);
-            }
-            this.posts.reverse();
-            //sort array, latest first, and then display the first child
-            if(this.posts.length<=0) {
-                console.log("Handle error for no match of posts here");
-            }
-            this.loading=false;
-            // this.posts = [
-            //   {
-            //     id:1,
-            //     content: "this is a test dummy content lorem impsum i don't know enough latin to write that",
-            //     date: "19 May 2019",
-            //     title: "Gern geschehen"
-            //   },
-            //   {
-            //     id:2,
-            //     content: "this is a test dummy content lorem impsum i don't know enough latin to write that",
-            //     date: "19 May 2019",
-            //     title: "Wasser bitte"
-            //   }
-            // ]
-        });
+    created: async function () {
+        var data = await app.methods.getData()
+        this.posts = [];
+        for(var key in data.posts) {
+            this.posts.push(data.posts[key]);
+        }
+        this.posts.reverse();
+        //sort array, latest first, and then display the first child
+        if(this.posts.length<=0) {
+            console.log("Handle error for no match of posts here");
+        }
+        this.loading=false;
     }
 }
 </script>

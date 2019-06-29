@@ -43,8 +43,7 @@
 <script>
 // @ is an alias to /src
 import Post from '@/components/Post.vue'
-import firebase from 'firebase/app'
-import 'firebase/database'
+import app from '../App.vue'
 
 export default {
   name: 'home',
@@ -59,39 +58,27 @@ export default {
           blogTitle: 'loading...'
       }
     },
-    created: function () {
-        firebase.database().ref("settings/blogTitle").once('value', (s) => {
-          if(s.val()) {
-            this.blogTitle = s.val()
-          }
-        });
-        firebase.database().ref('posts/').on('value', (s)=>{
-            this.posts = [];
-            var values = s.val()
-            for(var key in values) {
-                this.posts.push(values[key]);
-            }
-            this.posts.reverse();
-            //sort array, latest first, and then display the first child
-            if(this.posts.length<=0) {
-                console.log("Handle error for no match of posts here");
-            }
-            this.loading=false;
-            // this.posts = [
-            //   {
-            //     id:1,
-            //     content: "this is a test dummy content lorem impsum i don't know enough latin to write that",
-            //     date: "19 May 2019",
-            //     title: "Gern geschehen"
-            //   },
-            //   {
-            //     id:2,
-            //     content: "this is a test dummy content lorem impsum i don't know enough latin to write that",
-            //     date: "19 May 2019",
-            //     title: "Wasser bitte"
-            //   }
-            // ]
-        });
+    created: async function () {
+
+      var data = await app.methods.getData();
+
+      console.log(data)
+
+      this.blogTitle = data.settings.blogTitle
+
+      this.posts = []
+      var jsonPosts = data.posts
+      for (var post in jsonPosts) {
+        this.posts.push(jsonPosts[post])
+      }
+      this.posts.reverse();
+
+      if(this.posts.length<=0) {
+        //handle error for no posts
+      }
+
+      this.loading=false
+
     }
 }
 </script>

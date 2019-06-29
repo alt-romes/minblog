@@ -39,8 +39,7 @@
 </template>
 
 <script>
-import firebase from 'firebase/app'
-import 'firebase/database'
+import app from '../App.vue'
 import marked from 'marked'
 
 export default {
@@ -58,10 +57,9 @@ export default {
       }
     }
   },
-  created: function () {
-    firebase.database().ref("settings").on('value', (s) => {
-      this.settings=s.val()
-    })
+  created: async function () {
+    var data = await app.methods.getData()
+    this.settings=data.settings
   }
 }
 </script>
