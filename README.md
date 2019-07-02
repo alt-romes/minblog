@@ -3,6 +3,12 @@ a **minimal designed blog platform**, and a *complete beginners guide* on how to
 the live demo:
 https://alt-romes.github.io/minblog
 
+## ---------------------
+
+This project is undergoing several changes, come back later for something that is working
+
+## ----------------------
+
 ## 1 - Getting started
 
 1. Cloning / downloading the repository (on the command line)
