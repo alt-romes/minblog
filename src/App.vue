@@ -10,11 +10,10 @@
 
 <script>
 
-import * as BrowserFS from 'browserfs'
+import LightningFS from '@isomorphic-git/lightning-fs'
 import * as git from 'isomorphic-git'
 import { parse } from 'path';
 import { stringify } from 'querystring';
-import FS from 'browserfs/dist/node/core/FS';
 
 export default {
   data () {
@@ -27,40 +26,41 @@ export default {
     }
   },
   created: function () {
+    window.fs = new LightningFS('fs', { wipe: true })
+    git.plugins.set('fs', window.fs)
+    window.pfs = window.fs.promises
     window.dir = '/teste'
   },
   methods: {
+    createdLogin: async function () {
+      var readdir = await pfs.readdir(dir).catch(async (err) => {
+        console.log(err)
+        await pfs.mkdir(dir);
+      })
+      if (readdir) console.log(readdir)
+      await git.clone({
+        dir: dir,
+        corsProxy: 'https://cors.isomorphic-git.org',
+        url: "https://github.com/alt-romes/minblog",
+        ref: 'master',
+        depth: 1,
+        singleBranch: true,
+        tags: false
+      })
+    },
     login: async function (usr, pass) {
       this.username = usr;
       this.password = pass;
-      return await BrowserFS.configure({ fs: "IndexedDB", options: {} }, async (err) => {
-        if (err) return console.log(err);
-        const fs = BrowserFS.BFSRequire("fs");
-        git.plugins.set('fs', fs)
-        console.log(await fs.readdir(dir))
-        await git.clone({
-          dir: dir,
-          corsProxy: 'https://cors.isomorphic-git.org',
-          url: "https://github.com/alt-romes/minblog",
-          ref: 'master',
-          depth: 1,
-          singleBranch: true,
-          tags: false
-        })
-        var pushJson = {
-          dir: dir,
-          remote: 'origin',
-          branch: 'master',
-          username: this.username,
-          password: this.password
-        }
-        var valid = await git.push(pushJson).catch((err) => {
-          if(err.toString().substring(0, 9) == "HTTPError")
-            return false
-          return true
-        })
-        return valid
-      });
+      return await git.push({
+        dir: dir,
+        remote: 'origin',
+        ref: 'master',
+        username: usr,
+        password: pass
+      }).catch((err) => {
+        if(err.toString().substring(0, 9)=="HTTPError") return false
+        return true
+      })
     },
     signOut: function () {
       this.username = null
@@ -71,28 +71,19 @@ export default {
       return false
     },
     getData: async function () {
-
-      this.jsonData = await fetch('https://raw.githubusercontent.com/alt-romes/minblog/master/public/data.json')
-        .then(
-          function (response) {
-            if (response.status !== 200) {
-              console.log('Looks like there was a problem. Status Code: ' +
-                response.status);
-              return;
-            }
-            // Examine the text in the response
-            var data = response.json().then(function (data) {
-              // console.log(data);
-              return data
-            });
-
-            return data
-
-          }
-        )
-        .catch(function(err) {
-          console.log('Fetch Error :-S', err);
-      });
+      // var urlAux = this.gitUrl.split("github.com/")[1]
+      // console.log(urlAux)
+      this.jsonData = await fetch('https://raw.githubusercontent.com/' + "alt-romes/minblog" + '/master/public/data.json').then(function (response) {
+        if (response.status !== 200) {
+          console.log('Looks like there was a problem. Status Code: ' + response.status);
+          return;
+        }
+        var data = response.json().then(function (data) {
+          return data
+        });
+        return data
+      })
+      
       // if(this.jsonData == null) {
       //   //Initialize isomorphic-git with a file system
       //   window.fs = new LightningFS('fs')
@@ -153,31 +144,25 @@ export default {
       this.writeToGithub()
     },
     writeToGithub: async function() {
-      BrowserFS.configure({ fs: "IndexedDB", options: {} }, async (err) => {
-        if (err) return console.log(err);
-        const fs = BrowserFS.BFSRequire("fs");
-        git.plugins.set('fs', fs)
-        console.log(await fs.readdir(dir))
-        await fs.writeFile('/public/data.json', JSON.stringify(this.jsonData), 'utf8')
-        await git.add({dir: dir + "/public/", filepath: 'data.json'})
-        var commit = await git.commit({
-          dir: dir,
-          author: {
-            name: this.username,
-            email: 'alt.romes@gmail.com'
-          },
-          message: 'updated content'
-        })
-        console.log(commit)
-        let pushResponse = await git.push({
-          dir: dir,
-          remote: 'origin',
-          branch: 'master',
-          username: this.username,
-          password: this.password
-        })
-        console.log(pushResponse)
-      });
+      await fs.writeFile(dir + '/public/data.json', JSON.stringify(this.jsonData), 'utf8')
+      await git.add({dir: dir + "/public/", filepath: 'data.json'})
+      var commit = await git.commit({
+        dir: dir,
+        author: {
+          name: this.username,
+          email: 'alt.romes@gmail.com'
+        },
+        message: 'updated content'
+      })
+      console.log(commit)
+      let pushResponse = await git.push({
+        dir: dir,
+        remote: 'origin',
+        branch: 'master',
+        username: this.username,
+        password: this.password
+      })
+      console.log(pushResponse)
     }
   }
 }

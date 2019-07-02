@@ -7,7 +7,7 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "browserfs": "^1.4.3",
+    "@isomorphic-git/lightning-fs": "^3.3.0",
     "bulma": "^0.7.4",
     "core-js": "^2.6.5",
     "firebase": "^6.0.2",

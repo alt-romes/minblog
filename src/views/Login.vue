@@ -14,17 +14,22 @@
         <section class="hero is-large">
             <div class="hero-body">
                 <div class="main-container">
-                    <div class="field">
-                        <input class="input" type="text" placeholder="email" v-model="username">
+                    <div v-if="loading" class="has-text-centered">
+                        <span class="icon"><i class="fas fa-circle-notch fa-spin"></i></span>
                     </div>
-                    <div class="field">
-                        <input class="input" type="password" placeholder="password" v-model="password">
-                    </div>
-                    <div v-if="isInvalid" class="field">
-                        <p class="label" style="color: red">Invalid username and password!</p>
-                    </div>
-                    <div class="field has-text-centered">
-                        <button class="button" @click="login">login</button>
+                    <div v-else>
+                        <div class="field">
+                            <input class="input" type="text" placeholder="email" v-model="username">
+                        </div>
+                        <div class="field">
+                            <input class="input" type="password" placeholder="password" v-model="password">
+                        </div>
+                        <div v-if="isInvalid" class="field">
+                            <p class="label" style="color: red">Invalid username and password!</p>
+                        </div>
+                        <div class="field has-text-centered">
+                            <button class="button" @click="login">login</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -40,8 +45,13 @@ export default {
         return {
             username: null,
             password: null,
-            isInvalid: false
+            isInvalid: false,
+            loading: true
         }
+    },
+    created: async function () {
+        await app.methods.createdLogin()
+        this.loading=false
     },
     methods: {
         login: async function () {
