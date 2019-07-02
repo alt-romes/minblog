@@ -8,7 +8,7 @@
                             <router-link to="/"><span class="icon"><i class="fas fa-arrow-left"></i></span></router-link>
                         </div>
                     </div>
-                </div> 
+                </div>
             </div>
         </section>
         <section class="hero is-large">
@@ -18,7 +18,10 @@
                         <input class="input" type="text" placeholder="email" v-model="username">
                     </div>
                     <div class="field">
-                        <input class="input" type="password" placeholder="password" v-model="password">                
+                        <input class="input" type="password" placeholder="password" v-model="password">
+                    </div>
+                    <div v-if="isInvalid" class="field">
+                        <p class="label" style="color: red">Invalid username and password!</p>
                     </div>
                     <div class="field has-text-centered">
                         <button class="button" @click="login">login</button>
@@ -30,29 +33,26 @@
 </template>
 
 <script>
-import firebase from 'firebase/app'
-import 'firebase/auth'
+import app from '../App.vue'
 
 export default {
     data () {
         return {
             username: null,
-            password: null
+            password: null,
+            isInvalid: false
         }
     },
     methods: {
-        login: function () {
-            firebase.auth().signInWithEmailAndPassword(this.username, this.password).then(
-                (user) => {
-                    this.$router.replace('dashboard')
-                    // console.log(user);
-                    // this.username="";
-                    // this.password="";
-                },
-                function(err) {
-                    console.log(err);
-                },
-            );
+        login: async function () {
+            var validLogin = await app.methods.login(this.username, this.password);
+            if (validLogin) {
+                this.$router.replace('dashboard')
+                this.isInvalid = false
+            }
+            else {
+                this.isInvalid = true
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import About from './views/About.vue'
 
+import app from './App.vue'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 
@@ -64,10 +65,10 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-  const currentUser = firebase.auth().currentUser;
+  const isLoggedIn = app.methods.isLoggedIn();
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   
-  if(requiresAuth && !currentUser) {
+  if(requiresAuth && !isLoggedIn) {
     next('login');
   } else {
     next();

@@ -18,14 +18,42 @@ import { stringify } from 'querystring';
 export default {
   data () {
     return {
+      username: null,
+      password: null,
       jsonData: null,
-      gitUrl: "https://github.com/alt-romes/minblog"
+      gitUrl: "https://github.com/alt-romes/minblog",
+      jsonFilePath: '/src/data.json'
     }
   },
   created: function () {
     this.getData()
   },
   methods: {
+    login: async function (usr, pass) {
+      this.username = usr;
+      this.password = pass;
+      var pushJson = {
+        dir: dir,
+        remote: 'origin',
+        branch: 'master',
+        username: this.username,
+        password: this.password
+      }
+      var valid = await git.push(pushJson).catch((err) => {
+        if(err.toString().substring(0, 9) == "HTTPError")
+          return false
+        return true
+      })
+      return valid
+    },
+    signOut: function () {
+      this.username = null
+      this.password = null
+    },
+    isLoggedIn: function () {
+      if (this.username && this.password) return true
+      return false
+    },
     getData: async function () {
       if(this.jsonData == null) {
         //Initialize isomorphic-git with a file system
@@ -41,9 +69,10 @@ export default {
           await pfs.mkdir(dir);
         })
 
+        console.log(await pfs.readdir("/teste/public"))
+
         if(!readdir.length) {
-          console.log("nothing here... cloning repo")
-          await git.clone({
+          await git.fetch({
             dir: dir,
             corsProxy: 'https://cors.isomorphic-git.org',
             url: this.gitUrl,
@@ -53,14 +82,19 @@ export default {
             tags: false
           })
           console.log("cloned")
-        } else {
+        }
+        this.jsonData = JSON.parse(new TextDecoder("utf-8").decode(await pfs.readFile('/public/data.json')))
+      } else {
+        var status = await git.status({dir: dir, filepath: '/public/data.json'})
+        console.log(status)
+        if(status!="unmodified") {
           await git.pull({
             dir: dir,
             ref: 'master',
             singleBranch: true
           })
-        }
-        this.jsonData = JSON.parse(new TextDecoder("utf-8").decode(await pfs.readFile("/src/data.json")))
+        } 
+        this.jsonData = JSON.parse(new TextDecoder("utf-8").decode(await pfs.readFile('/public/data.json')))
       }
 
       return this.jsonData
@@ -83,9 +117,18 @@ export default {
       this.writeToGithub()
     },
     writeToGithub: async function() {
-      await pfs.writeFile("/src/data.json", JSON.stringify(this.jsonData))
+      await pfs.writeFile('/public/data.json', JSON.stringify(this.jsonData), 'utf8')
+      await git.add({dir: dir, filepath: '/public/data.json'})
+      var commit = await git.commit({
+        dir: dir,
+        author: {
+          name: this.username
+        },
+        message: 'updated content'
+      })
+      console.log(commit)
       let pushResponse = await git.push({
-        dir: "/src/data.json",
+        dir: dir,
         remote: 'origin',
         branch: 'master',
         username: this.username,
