@@ -25,15 +25,12 @@ export default {
       jsonFilePath: '/src/data.json'
     }
   },
-  created: function () {
-    this.getData()
-  },
   methods: {
     login: async function (usr, pass) {
       this.username = usr;
       this.password = pass;
       var pushJson = {
-        dir: dir,
+        dir: '/teste',
         remote: 'origin',
         branch: 'master',
         username: this.username,
@@ -55,14 +52,14 @@ export default {
       return false
     },
     getData: async function () {
+      window.fs = new LightningFS('fs')
+      git.plugins.set('fs', window.fs)
+      // I prefer using the Promisified version honestly
+      window.pfs = window.fs.promises
+        
+      window.dir = '/teste'
       if(this.jsonData == null) {
         //Initialize isomorphic-git with a file system
-        window.fs = new LightningFS('fs')
-        git.plugins.set('fs', window.fs)
-        // I prefer using the Promisified version honestly
-        window.pfs = window.fs.promises
-        
-        window.dir = '/teste'
         
         var readdir = await pfs.readdir(dir).catch(async (err) => {
           console.log(err)
@@ -83,9 +80,8 @@ export default {
           })
           console.log("cloned")
         }
-        this.jsonData = JSON.parse(new TextDecoder("utf-8").decode(await pfs.readFile('/public/data.json')))
-      } else {
-        var status = await git.status({dir: dir, filepath: '/public/data.json'})
+
+        var status = await git.status({dir: dir+"/public/", filepath: 'data.json'})
         console.log(status)
         if(status!="unmodified") {
           await git.pull({
@@ -94,7 +90,8 @@ export default {
             singleBranch: true
           })
         } 
-        this.jsonData = JSON.parse(new TextDecoder("utf-8").decode(await pfs.readFile('/public/data.json')))
+
+        this.jsonData = JSON.parse(new TextDecoder("utf-8").decode(await pfs.readFile(dir + '/public/data.json')))
       }
 
       return this.jsonData
@@ -118,11 +115,12 @@ export default {
     },
     writeToGithub: async function() {
       await pfs.writeFile('/public/data.json', JSON.stringify(this.jsonData), 'utf8')
-      await git.add({dir: dir, filepath: '/public/data.json'})
+      await git.add({dir: dir + "/public/", filepath: 'data.json'})
       var commit = await git.commit({
         dir: dir,
         author: {
-          name: this.username
+          name: this.username,
+          email: 'alt.romes@gmail.com'
         },
         message: 'updated content'
       })
