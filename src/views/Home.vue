@@ -62,6 +62,8 @@ export default {
 
       var data = await app.methods.getData();
 
+      if(!data) return
+
       console.log(data)
 
       this.blogTitle = data.settings.blogTitle
