@@ -10,7 +10,6 @@
     "@isomorphic-git/lightning-fs": "^3.3.0",
     "bulma": "^0.7.4",
     "core-js": "^2.6.5",
-    "firebase": "^6.0.2",
     "isomorphic-git": "^0.55.4",
     "marked": "^0.6.2",
     "register-service-worker": "^1.6.2",

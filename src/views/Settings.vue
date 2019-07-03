@@ -67,8 +67,6 @@
 </style>
 
 <script>
-import firebase from 'firebase/app'
-import 'firebase/database'
 import app from '../App.vue'
 
 export default {
@@ -83,7 +81,6 @@ export default {
     created: async function () {
         var data = await app.methods.getData()
         this.settings = data.settings
-        console.log(this.settings)
         this.loading=false;
     },
     methods: {

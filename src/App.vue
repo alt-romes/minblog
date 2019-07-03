@@ -18,8 +18,10 @@ import { stringify } from 'querystring';
 /**
  * Change the links below to your own according to the guide.
  */
+//This is your github repository's url. Don't use ".git" or "/" in the end
 const gitUrl = "https://github.com/alt-romes/minblog"
-
+//This is the email the commits will be assigned to, this will be shown only in this github repository.
+const email = "alt.romes@gmail.com"
 
 
 
@@ -32,15 +34,14 @@ export default {
     window.fs = new LightningFS('fs', { wipe: true })
     git.plugins.set('fs', window.fs)
     window.pfs = window.fs.promises
-    window.dir = '/teste'
+    window.dir = '/site'
   },
   methods: {
     createdLogin: async function () {
+      if(!this.jsonData) this.getData()
       var readdir = await pfs.readdir(dir).catch(async (err) => {
-        console.log(err)
         await pfs.mkdir(dir);
       })
-      if (readdir) console.log(readdir)
       await git.clone({
         dir: dir,
         corsProxy: 'https://cors.isomorphic-git.org',
@@ -96,8 +97,11 @@ export default {
       this.writeToGithub()
     },
     newPost: async function (post) {
-      post.id = this.jsonData.posts[this.jsonData.posts.length-1]+1
+      console.log(this.jsonData)
+      if(!this.jsonData.posts[this.jsonData.posts.length-1]) post.id = 0;
+      else post.id = this.jsonData.posts[this.jsonData.posts.length-1]+1
       this.jsonData.posts[post.id] = post
+      console.log(this.jsonData)
       this.writeToGithub()
     },
     changeSettings: async function(settings) {
@@ -105,25 +109,32 @@ export default {
       this.writeToGithub()
     },
     writeToGithub: async function() {
-      await fs.writeFile(dir + '/public/data.json', JSON.stringify(this.jsonData), 'utf8')
-      await git.add({dir: dir + "/public/", filepath: 'data.json'})
-      var commit = await git.commit({
-        dir: dir,
-        author: {
-          name: this.username,
-          email: 'alt.romes@gmail.com'
-        },
-        message: 'updated content'
+      var toWrite = new TextEncoder().encode(JSON.stringify(this.jsonData))
+      console.log(toWrite.join(''))
+      await fs.writeFile('/site/public/data.json', toWrite, async (e) => {
+        await git.add({dir: dir + "/public/", filepath: 'data.json'}, (err) => {if(err) console.log(err)})
+        var commit = await git.commit({
+          dir: dir,
+          author: {
+            name: this.username,
+            email: email
+          },
+          message: 'updated content'
+        }, (err) => {if(err) console.log(err)})
+        //console.log(commit)
+        let pushResponse = await git.push({
+          dir: dir,
+          force: true,
+          remote: 'origin',
+          branch: 'master',
+          username: this.username,
+          password: this.password
+        }, (err) => {if(err) console.log(err)})
+        //console.log(pushResponse)
+        this.getData()
       })
-      console.log(commit)
-      let pushResponse = await git.push({
-        dir: dir,
-        remote: 'origin',
-        branch: 'master',
-        username: this.username,
-        password: this.password
-      })
-      console.log(pushResponse)
+      //console.log(await git.status({dir: dir + "/public/", filepath: 'data.json'}, (err) => {if(err) console.log(err)})) 
+
     }
   }
 }
