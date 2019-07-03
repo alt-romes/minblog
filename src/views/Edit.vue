@@ -51,8 +51,6 @@
 </style>
 
 <script>
-import firebase from 'firebase/app'
-import 'firebase/database'
 import app from '../App.vue'
 
 export default {

@@ -15,14 +15,17 @@ import * as git from 'isomorphic-git'
 import { parse } from 'path';
 import { stringify } from 'querystring';
 
+/**
+ * Change the links below to your own according to the guide.
+ */
+const gitUrl = "https://github.com/alt-romes/minblog"
+
+
+
+
 export default {
   data () {
     return {
-      username: null,
-      password: null,
-      jsonData: null,
-      gitUrl: "https://github.com/alt-romes/minblog",
-      jsonFilePath: '/public/data.json',
     }
   },
   created: function () {
@@ -41,7 +44,7 @@ export default {
       await git.clone({
         dir: dir,
         corsProxy: 'https://cors.isomorphic-git.org',
-        url: "https://github.com/alt-romes/minblog",
+        url: gitUrl,
         ref: 'master',
         depth: 1,
         singleBranch: true,
@@ -71,9 +74,8 @@ export default {
       return false
     },
     getData: async function () {
-      // var urlAux = this.gitUrl.split("github.com/")[1]
-      // console.log(urlAux)
-      this.jsonData = await fetch('https://raw.githubusercontent.com/' + "alt-romes/minblog" + '/master/public/data.json').then(function (response) {
+      var urlAux = gitUrl.split("github.com/")[1]
+      this.jsonData = await fetch('https://raw.githubusercontent.com/' + urlAux + '/master/public/data.json').then(function (response) {
         if (response.status !== 200) {
           console.log('Looks like there was a problem. Status Code: ' + response.status);
           return;
@@ -83,47 +85,6 @@ export default {
         });
         return data
       })
-      
-      // if(this.jsonData == null) {
-      //   //Initialize isomorphic-git with a file system
-      //   window.fs = new LightningFS('fs')
-      //   git.plugins.set('fs', window.fs)
-      //   // I prefer using the Promisified version honestly
-      //   window.pfs = window.fs.promises
-          
-      //   window.dir = '/teste3'
-      //   var readdir = await pfs.readdir(dir).catch(async (err) => {
-      //     console.log(err)
-      //     await pfs.mkdir(dir);
-      //   })
-
-      //   if(!readdir.length) {
-      //     await git.clone({
-      //       dir: dir,
-      //       corsProxy: 'https://cors.isomorphic-git.org',
-      //       url: this.gitUrl,
-      //       ref: 'master',
-      //       depth: 1,
-      //       singleBranch: true,
-      //       tags: false
-      //     })
-      //     console.log("cloned")
-      //   }
-
-      //   console.log(await pfs.readdir("/teste2"))
-
-      //   var status = await git.status({dir: dir+"/public/", filepath: 'data.json'})
-      //   console.log(status)
-      //   if(status!="unmodified") {
-      //     await git.pull({
-      //       dir: dir,
-      //       ref: 'master',
-      //       singleBranch: true
-      //     })
-      //   } 
-
-      //this.jsonData = JSON.parse(new TextDecoder("utf-8").decode(await fs.readFile(dir + "/public/data.json")))
-
       return this.jsonData
     },
     deletePost: function (id) {

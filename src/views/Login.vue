@@ -15,7 +15,10 @@
             <div class="hero-body">
                 <div class="main-container">
                     <div v-if="loading" class="has-text-centered">
-                        <span class="icon"><i class="fas fa-circle-notch fa-spin"></i></span>
+                        <span class="icon field"><i class="fas fa-circle-notch fa-spin"></i></span>
+                        <div class="field">
+                            <p class="label">Getting everything ready for you</p>
+                        </div>
                     </div>
                     <div v-else>
                         <div class="field">

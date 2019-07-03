@@ -64,8 +64,6 @@ export default {
 
       if(!data) return
 
-      console.log(data)
-
       this.blogTitle = data.settings.blogTitle
 
       this.posts = []
