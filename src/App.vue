@@ -97,11 +97,9 @@ export default {
       this.writeToGithub()
     },
     newPost: async function (post) {
-      console.log(this.jsonData)
       if(!this.jsonData.posts[this.jsonData.posts.length-1]) post.id = 0;
       else post.id = this.jsonData.posts[this.jsonData.posts.length-1]+1
       this.jsonData.posts[post.id] = post
-      console.log(this.jsonData)
       this.writeToGithub()
     },
     changeSettings: async function(settings) {
@@ -109,30 +107,31 @@ export default {
       this.writeToGithub()
     },
     writeToGithub: async function() {
-      var toWrite = new TextEncoder().encode(JSON.stringify(this.jsonData))
-      console.log(toWrite.join(''))
-      await fs.writeFile('/site/public/data.json', toWrite, async (e) => {
-        await git.add({dir: dir + "/public/", filepath: 'data.json'}, (err) => {if(err) console.log(err)})
-        var commit = await git.commit({
-          dir: dir,
-          author: {
-            name: this.username,
-            email: email
-          },
-          message: 'updated content'
-        }, (err) => {if(err) console.log(err)})
-        //console.log(commit)
-        let pushResponse = await git.push({
-          dir: dir,
-          force: true,
-          remote: 'origin',
-          branch: 'master',
-          username: this.username,
-          password: this.password
-        }, (err) => {if(err) console.log(err)})
-        //console.log(pushResponse)
-        this.getData()
+      var parsedobj = JSON.parse(JSON.stringify(this.jsonData))
+      console.log(parsedobj)
+      var toWrite = new TextEncoder().encode(JSON.stringify(parsedobj))
+      await pfs.writeFile(dir + '/public/data.json', toWrite, async (e) => {if(e) console.log(e)})
+      console.log(JSON.parse(new TextDecoder("utf-8").decode(await pfs.readFile(dir + '/public/data.json'))))
+      await git.add({dir: dir + "/public/", filepath: 'data.json'})
+      var commit = await git.commit({
+        dir: dir+'/public',
+        gitdir: dir,
+        author: {
+          name: this.username,
+          email: email
+        },
+        message: 'updated content'
       })
+      //console.log(commit)
+      let pushResponse = await git.push({
+        dir: dir+'/public',
+        force: true,
+        remote: 'origin',
+        branch: 'master',
+        username: this.username,
+        password: this.password
+      }, (err) => {if(err) console.log(err)})
+      //console.log(pushResponse)
       //console.log(await git.status({dir: dir + "/public/", filepath: 'data.json'}, (err) => {if(err) console.log(err)})) 
 
     }

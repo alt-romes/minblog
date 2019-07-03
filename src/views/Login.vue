@@ -22,7 +22,7 @@
                     </div>
                     <div v-else>
                         <div class="field">
-                            <input class="input" type="text" placeholder="email" v-model="username">
+                            <input class="input" type="text" placeholder="username" v-model="username">
                         </div>
                         <div class="field">
                             <input class="input" type="password" placeholder="password" v-model="password">
