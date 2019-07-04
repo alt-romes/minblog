@@ -70,6 +70,7 @@ git push -f <link you copied> master
 *Example*
 ```
 cd alt-romes.github.io
+...
 git push -f https://github.com/alt-romes/alt-romes.github.io.git master
 ```
 
