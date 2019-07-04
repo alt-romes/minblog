@@ -1,6 +1,6 @@
 {
-  "name": "minblog",
-  "short_name": "minblog",
+  "name": "minblogdemo",
+  "short_name": "minblogdemo",
   "icons": [
     {
       "src": "./img/icons/android-chrome-192x192.png",
