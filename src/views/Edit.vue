@@ -19,7 +19,7 @@
             <div v-else>
                 <a class="field button" @click="hideTips=!hideTips">tips</a>
                 <div class="field" v-if="!hideTips">
-                    <label class="label has-text-danger">others might only be able to see updated content in up to 5 minutes</label> 
+                    <label class="label has-text-danger">others might only be able to see updated content in up to 5 minutes, (if you refresh, you'll see what others see, if it gets confusing just wait and everything will be back to normal)</label> 
                     <label class="label has-text-warning">it's recommended to write elsewhere and paste it here. if you leave, the progress will not be saved</label>
                     <label class="label has-text-success">you are always able to edit a post.</label>
                 </div>

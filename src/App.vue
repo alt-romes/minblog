@@ -100,7 +100,7 @@ export default {
           return data
         })
       }
-      return this.jsonData
+      return JSON.parse(JSON.stringify(this.jsonData))
     },
     deletePost: function (id) {
       delete this.jsonData.posts[id]
@@ -113,8 +113,10 @@ export default {
     newPost: async function (post) {
       if(this.jsonData.posts.length==0)
         post.id = 0;
-      else
-        post.id = this.jsonData.posts[(this.jsonData.posts.length-1).toString()].id+1
+      else {
+        var parsedobj = JSON.parse(JSON.stringify(this.jsonData))
+        post.id = (parseInt(parsedobj.posts[Object.keys(parsedobj.posts).length-1].id)+1).toString()
+      }
       this.jsonData.posts[post.id] = post
       this.writeToGithub()
     },
@@ -124,6 +126,8 @@ export default {
     },
     writeToGithub: async function() {
       var parsedobj = JSON.parse(JSON.stringify(this.jsonData))
+      this.jsonData = parsedobj
+      console.log(parsedobj)
       var toWrite = new TextEncoder().encode(JSON.stringify(parsedobj))
       await pfs.writeFile(dir + '/data.json', toWrite, async (e) => {if(e) console.log(e)})
       await git.add({dir: dir, filepath: 'data.json'}).catch((err) => {console.log("add: " + err)})
@@ -135,7 +139,6 @@ export default {
         },
         message: 'updated content'
       }).catch((err) => {console.log("commit: "+ err)})
-      // console.log(commit + "hey")
       let pushResponse = await git.push({
         dir: dir,
         force: true,
@@ -144,9 +147,6 @@ export default {
         username: this.username,
         password: this.password
       }).catch((err) => {console.log("push" + err)})
-      //console.log(pushResponse)
-      //console.log(await git.status({dir: dir + "/public/", filepath: 'data.json'}, (err) => {if(err) console.log(err)})) 
-      this.getData()
     }
   }
 }

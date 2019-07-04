@@ -1,6 +1,6 @@
 module.exports = {
   outputDir: 'minblogdemo',
-  publicPath: 'minblogdemo',
+  // publicPath: 'minblogdemo',
   devServer: {
     disableHostCheck: true
   },

@@ -74,10 +74,11 @@ export default {
         }
     },
     methods: {
-        confirmDelete: function (id) {
-            var confirm = window.confirm("Do you really want to delete this post?");
+        confirmDelete: async function (id) {
+            var confirm = window.confirm("Do you really want to delete this post? After deleting click the back arrow and come back here to see the post gone.");
             if(confirm) {
                 app.methods.deletePost(id)
+                this.$forceUpdate()
             }
         },
         logout: function () {
