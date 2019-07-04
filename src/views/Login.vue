@@ -21,6 +21,7 @@
                         </div>
                     </div>
                     <div v-else>
+                        <p class="field label">Sign in with your github username and password</p>
                         <div class="field">
                             <input class="input" type="text" placeholder="username" v-model="username">
                         </div>
