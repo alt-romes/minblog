@@ -15,13 +15,22 @@ import * as git from 'isomorphic-git'
 import { parse } from 'path';
 import { stringify } from 'querystring';
 
+
+
+
+
+
 /**
  * Change the links below to your own according to the guide.
  */
 //This is your github repository's url. Don't use ".git" or "/" in the end
-const gitUrl = "https://github.com/alt-romes/minblog"
+var gitUrl = "https://github.com/alt-romes/minblog"
 //This is the email the commits will be assigned to, this will be shown only in this github repository.
 const email = "alt.romes@gmail.com"
+
+
+
+
 
 
 
@@ -31,6 +40,7 @@ export default {
     }
   },
   created: function () {
+    if(gitUrl.endsWith(".git")) gitUrl=gitUrl.substring(0, gitUrl.length - 4)
     window.fs = new LightningFS('fs', { wipe: true })
     git.plugins.set('fs', window.fs)
     window.pfs = window.fs.promises
@@ -75,17 +85,19 @@ export default {
       return false
     },
     getData: async function () {
-      var urlAux = gitUrl.split("github.com/")[1]
-      this.jsonData = await fetch('https://raw.githubusercontent.com/' + urlAux + '/master/public/data.json').then(function (response) {
-        if (response.status !== 200) {
-          console.log('Looks like there was a problem. Status Code: ' + response.status);
-          return;
-        }
-        var data = response.json().then(function (data) {
+      if(!this.jsonData) {
+        var urlAux = gitUrl.split("github.com/")[1]
+        this.jsonData = await fetch('https://raw.githubusercontent.com/' + urlAux + '/master/public/data.json').then(function (response) {
+          if (response.status !== 200) {
+            console.log('Looks like there was a problem. Status Code: ' + response.status);
+            return;
+          }
+          var data = response.json().then(function (data) {
+            return data
+          });
           return data
-        });
-        return data
-      })
+        })
+      }
       return this.jsonData
     },
     deletePost: function (id) {
@@ -108,29 +120,27 @@ export default {
     },
     writeToGithub: async function() {
       var parsedobj = JSON.parse(JSON.stringify(this.jsonData))
-      console.log(parsedobj)
       var toWrite = new TextEncoder().encode(JSON.stringify(parsedobj))
       await pfs.writeFile(dir + '/public/data.json', toWrite, async (e) => {if(e) console.log(e)})
       console.log(JSON.parse(new TextDecoder("utf-8").decode(await pfs.readFile(dir + '/public/data.json'))))
-      await git.add({dir: dir + "/public/", filepath: 'data.json'})
+      await git.add({dir: dir, filepath: 'public/data.json'}).catch((err) => {console.log("add: " + err)})
       var commit = await git.commit({
-        dir: dir+'/public',
-        gitdir: dir,
+        dir: dir,
         author: {
           name: this.username,
           email: email
         },
         message: 'updated content'
-      })
-      //console.log(commit)
+      }).catch((err) => {console.log("commit: "+ err)})
+      // console.log(commit + "hey")
       let pushResponse = await git.push({
-        dir: dir+'/public',
+        dir: dir,
         force: true,
         remote: 'origin',
         branch: 'master',
         username: this.username,
         password: this.password
-      }, (err) => {if(err) console.log(err)})
+      }).catch((err) => {console.log("push" + err)})
       //console.log(pushResponse)
       //console.log(await git.status({dir: dir + "/public/", filepath: 'data.json'}, (err) => {if(err) console.log(err)})) 
 

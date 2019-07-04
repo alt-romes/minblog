@@ -12,13 +12,14 @@
         </div>
     </section>
     <section class="section">
-        <div class="main-container">
+        <div class="container">
             <div v-if="loading" class="has-text-centered">
                 <span class="icon"><i class="fas fa-circle-notch fa-spin"></i></span>
             </div>
             <div v-else>
-                <label class="label has-text-danger">it's recommended to write elsewhere and paste it here. if you leave, the progress will not be saved</label>
-                <label class="label has-text-success">after sent, you are able to edit it</label>
+                <label class="label has-text-warning">it's recommended to write elsewhere and paste it here. if you leave, the progress will not be saved</label> 
+                <label class="label has-text-warning">it's recommended to write elsewhere and paste it here. if you leave, the progress will not be saved</label>
+                <label class="label has-text-success">you are always able to edit a post.</label>
                 <div class="field">
                     <label class="label">title</label>
                     <div class="control">
@@ -32,9 +33,8 @@
                     </div>
                 </div>
                 <div class="field">
-                    <label class="label">confirm submission</label>
                     <div class="control">
-                        <button class="button is-success" @click="submitPost">finish</button>
+                        <button class="button is-success" @click="submitPost">save</button>
                     </div>
                 </div>
             </div>

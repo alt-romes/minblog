@@ -1,5 +1,5 @@
 module.exports = {
-    outputDir: 'example-blog.github.io',
+    outputDir: 'docs',
     devServer: {
       disableHostCheck: true
     },

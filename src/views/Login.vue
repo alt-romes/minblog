@@ -28,7 +28,7 @@
                             <input class="input" type="password" placeholder="password" v-model="password">
                         </div>
                         <div v-if="isInvalid" class="field">
-                            <p class="label" style="color: red">Invalid username or password!</p>
+                            <p class="label has-text-danger">Invalid username or password!</p>
                         </div>
                         <div class="field has-text-centered">
                             <button class="button" @click="login">login</button>
