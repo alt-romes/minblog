@@ -17,9 +17,12 @@
                 <span class="icon"><i class="fas fa-circle-notch fa-spin"></i></span>
             </div>
             <div v-else>
-                <label class="label has-text-warning">it's recommended to write elsewhere and paste it here. if you leave, the progress will not be saved</label> 
-                <label class="label has-text-warning">it's recommended to write elsewhere and paste it here. if you leave, the progress will not be saved</label>
-                <label class="label has-text-success">you are always able to edit a post.</label>
+                <a class="field button" @click="hideTips=!hideTips">tips</a>
+                <div class="field" v-if="!hideTips">
+                    <label class="label has-text-danger">others might only be able to see updated content in up to 5 minutes</label> 
+                    <label class="label has-text-warning">it's recommended to write elsewhere and paste it here. if you leave, the progress will not be saved</label>
+                    <label class="label has-text-success">you are always able to edit a post.</label>
+                </div>
                 <div class="field">
                     <label class="label">title</label>
                     <div class="control">
@@ -29,7 +32,7 @@
                 <div class="field">
                     <label class="label">content <span class="has-text-info">(markdown supported)</span></label>
                     <div class="control">
-                        <textarea v-model="post.content" class="textarea" rows="10" placeholder="write away..."></textarea>
+                        <textarea v-model="post.content" class="textarea" rows="20" placeholder="write away..."></textarea>
                     </div>
                 </div>
                 <div class="field">
@@ -56,6 +59,7 @@ import app from '../App.vue'
 export default {
     data() {
         return {
+            hideTips: false,
             months: ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"],
             post: {},
             loading: true

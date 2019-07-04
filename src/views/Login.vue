@@ -25,7 +25,7 @@
                             <input class="input" type="text" placeholder="username" v-model="username">
                         </div>
                         <div class="field">
-                            <input class="input" type="password" placeholder="password" v-model="password">
+                            <input @keyup.enter="login" class="input" type="password" placeholder="password" v-model="password">
                         </div>
                         <div v-if="isInvalid" class="field">
                             <p class="label has-text-danger">Invalid username or password!</p>

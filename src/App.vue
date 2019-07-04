@@ -109,8 +109,11 @@ export default {
       this.writeToGithub()
     },
     newPost: async function (post) {
-      if(!this.jsonData.posts[this.jsonData.posts.length-1]) post.id = 0;
-      else post.id = this.jsonData.posts[this.jsonData.posts.length-1]+1
+      if(this.jsonData.posts.length==0) post.id = 0;
+      else {
+        console.log(this.jsonData.posts[this.jsonData.posts.length-1].id)
+        post.id = this.jsonData.posts[this.jsonData.posts.length-1].id+1
+      }
       this.jsonData.posts[post.id] = post
       this.writeToGithub()
     },
@@ -143,7 +146,7 @@ export default {
       }).catch((err) => {console.log("push" + err)})
       //console.log(pushResponse)
       //console.log(await git.status({dir: dir + "/public/", filepath: 'data.json'}, (err) => {if(err) console.log(err)})) 
-
+      this.getData()
     }
   }
 }
