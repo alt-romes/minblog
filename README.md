@@ -21,7 +21,7 @@ npm install
 1. Login / SignUp at https://github.com.
 
 2. Create a new repository called: **username.github.io**
-![new repo](https://i.imgur.com/fKuoOOm.png)
+![new repo](https://i.imgur.com/bTYXvou.png)
 
 ### 4 - Configuring
 
