@@ -3,7 +3,7 @@ a **minimal blog platform**, and a *complete beginners guide* on how to set it u
 the live demo:
 https://alt-romes.github.io/minblogdemo
 
-built with: built with vue, bulma and isomorphic-git (with lightning-fs).
+built with: built with vue, bulma and isomorphic-git (with lightning-fs). when you update a post, it will push the updated data.json to the repo.
 
 ## 1 - Getting started
 
