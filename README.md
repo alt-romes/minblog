@@ -1,9 +1,9 @@
 # minblog
-a **minimal designed blog platform**, and a *complete beginners guide* on how to set it up and host it in github pages, so you can have a personal blog with little effort.
+a **minimal blog platform**, and a *complete beginners guide* on how to set it up and host it with github pages, so you can have a personal blog with little effort for free, and above all, on your own platform.
 the live demo:
-https://alt-romes.github.io/minblog
+https://alt-romes.github.io/minblogdemo
 
-built with: built with vue, bulma and isomorphic-git
+built with: built with vue, bulma and isomorphic-git (with lightning-fs). when you update a post, it will push the updated data.json to the repo.
 
 ## 1 - Getting started
 
@@ -20,7 +20,7 @@ npm install
 
 ## 2 - Github
 
-1. Login / SignUp at https://github.com.
+1. Login / Sign Up at https://github.com.
 
 2. Create a new repository called: **username.github.io**
 
