@@ -1,5 +1,5 @@
 # minblog
-a **minimal designed blog platform**, and a *complete beginners guide* on how to set it up and host it with github pages, so you can have a personal blog with little effort for free.
+a **minimal blog platform**, and a *complete beginners guide* on how to set it up and host it with github pages, so you can have a personal blog with little effort for free, and above all, on your own platform.
 the live demo:
 https://alt-romes.github.io/minblogdemo
 
