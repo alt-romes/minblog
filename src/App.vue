@@ -114,7 +114,7 @@ export default {
       if(this.jsonData.posts.length==0)
         post.id = 0;
       else
-        post.id = this.jsonData.posts[this.jsonData.posts.length-1].id+1
+        post.id = this.jsonData.posts[(this.jsonData.posts.length-1).toString()].id+1
       this.jsonData.posts[post.id] = post
       this.writeToGithub()
     },
