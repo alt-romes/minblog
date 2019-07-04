@@ -1,5 +1,5 @@
 module.exports = {
-    outputDir: 'docs',
+    outputDir: 'minblogdemo',
     devServer: {
       disableHostCheck: true
     },

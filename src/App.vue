@@ -21,10 +21,12 @@ import { stringify } from 'querystring';
 
 
 /**
+ * CONFIGURATION:
+ *
  * Change the links below to your own according to the guide.
  */
-//This is your github repository's url. Don't use ".git" or "/" in the end
-var gitUrl = "https://github.com/alt-romes/minblog"
+//This is your github repository's url. Don't end the link with ".git" or "/" in the end
+var gitUrl = "https://github.com/alt-romes/minblogdemo"
 //This is the email the commits will be assigned to, this will be shown only in this github repository.
 const email = "alt.romes@gmail.com"
 
@@ -87,7 +89,7 @@ export default {
     getData: async function () {
       if(!this.jsonData) {
         var urlAux = gitUrl.split("github.com/")[1]
-        this.jsonData = await fetch('https://raw.githubusercontent.com/' + urlAux + '/master/public/data.json').then(function (response) {
+        this.jsonData = await fetch('https://raw.githubusercontent.com/' + urlAux + '/master/data.json').then(function (response) {
           if (response.status !== 200) {
             console.log('Looks like there was a problem. Status Code: ' + response.status);
             return;
@@ -123,9 +125,8 @@ export default {
     writeToGithub: async function() {
       var parsedobj = JSON.parse(JSON.stringify(this.jsonData))
       var toWrite = new TextEncoder().encode(JSON.stringify(parsedobj))
-      await pfs.writeFile(dir + '/public/data.json', toWrite, async (e) => {if(e) console.log(e)})
-      console.log(JSON.parse(new TextDecoder("utf-8").decode(await pfs.readFile(dir + '/public/data.json'))))
-      await git.add({dir: dir, filepath: 'public/data.json'}).catch((err) => {console.log("add: " + err)})
+      await pfs.writeFile(dir + '/data.json', toWrite, async (e) => {if(e) console.log(e)})
+      await git.add({dir: dir, filepath: 'data.json'}).catch((err) => {console.log("add: " + err)})
       var commit = await git.commit({
         dir: dir,
         author: {
