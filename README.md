@@ -34,15 +34,15 @@ npm install
 
 2. In the project folder, in the *src* directory, open *App.vue* and scroll down to the part that says "CONFIGURATION".
 
-  ..1. Copy your repository's URL
+  1. Copy your repository's URL
   
   ![repoURL](https://i.imgur.com/3xJtHvt.png)
 
-  ..2. Change the gitUrl's link to your repository's url
+  2. Change the gitUrl's link to your repository's url
   
   ![gitURL](https://i.imgur.com/tpSH8Gq.png)
   
-  ..3. Change the email to your email. It's merely informative for github, to associate to the publisher an email.
+  3. Change the email to your email. It's merely informative for github, to associate to the publisher an email.
 
 3. (Optional) For further web title costumization, you can open inside **public** folder, the file **index.html**, and change the text between the *<title></title>* tags, and open, in the same folder, the file **manifest.json** and change,  both the name and the short_name, to whatever.
 
