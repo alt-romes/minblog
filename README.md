@@ -1,3 +1,6 @@
+# I am not mantaining this project, and it's no longer working
+--------------------------------------------------------------
+
 # minblog
 an open source **minimal blogging platform**, and an easy to follow guide on how to set it up and host it with github pages, so you can have a personal blog with little effort for free and on your own platform.
 the live demo:
